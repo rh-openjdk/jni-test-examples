@@ -41,11 +41,6 @@ fi
 
 # all underlying maven/ant projects are honring JAVA_HOME as main source of truth
 export JAVA_HOME="$JAVA"
-# do not set unless you know what you are doing
-if [ "x$FORCE_INSTALL_JAVA" == "xtrue" ] ; then
-  # run folder as tests will now do the mayhem
-  JAVA=""
-fi
 
 if [ "x$RFAT" = "x" ] ; then
   if [ ! -e run-folder-as-tests ] ; then

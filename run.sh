@@ -65,6 +65,7 @@ if [ "x$JDK_MAJOR" == "x" ] ; then
     rm "${jshellScript}"
   fi
 fi
+export JDK_MAJOR
 echo "treating jdk as: $JDK_MAJOR"
 
 echo Running with $JAVA...

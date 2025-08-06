@@ -13,10 +13,10 @@ rm -rf $sub
 mkdir  $sub
 pushd  $sub
 
-if [ "x$OTOOL_JDK_VERSION" == "x" -o "0$OTOOL_JDK_VERSION" -ge 21 ] ; then
+if [ "x$JDK_MAJOR" == "x" -o "0$JDK_MAJOR" -ge 21 ] ; then
   JNR_LIVE_PROJECTS="jnr-enxio:0.32.18"
   patch="true"
-elif [ "0$OTOOL_JDK_VERSION" -ge 16 ] ; then
+elif [ "0$JDK_MAJOR" -ge 16 ] ; then
   JNR_LIVE_PROJECTS="jnr-enxio:0.32.6"
   patch="true"
 else

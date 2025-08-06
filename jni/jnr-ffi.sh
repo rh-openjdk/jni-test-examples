@@ -9,7 +9,7 @@ rm -rf $sub
 mkdir  $sub
 pushd  $sub
 
-if [ "x$OTOOL_JDK_VERSION" == "x" -o "0$OTOOL_JDK_VERSION" -ge 16 ] ; then
+if [ "x$JDK_MAJOR" == "x" -o "0$JDK_MAJOR" -ge 16 ] ; then
   JNR_LIVE_PROJECTS="jnr-ffi:2.2.4"
 else
   JNR_LIVE_PROJECTS="jnr-ffi:2.1.16"

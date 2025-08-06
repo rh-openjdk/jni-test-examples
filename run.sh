@@ -41,8 +41,11 @@ fi
 
 # all underlying maven/ant projects are honring JAVA_HOME as main source of truth
 export JAVA_HOME="$JAVA"
-# run folder as tests is otherwise doing weird things
-export ENFORCED_JDK_STATUS="$JAVA_HOME"
+# do not set unless you know what you are doing
+if [ "x$KEEP_ENFORCED_JDK_STATUS" == "x" ] ; then
+  # run folder as tests is otherwise doing weird things
+  export ENFORCED_JDK_STATUS="$JAVA_HOME"
+fi
 
 if [ "x$RFAT" = "x" ] ; then
   if [ ! -e run-folder-as-tests ] ; then

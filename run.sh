@@ -39,6 +39,9 @@ if [ "x$CYGWIN" == "xtrue" ] ; then
   JAVA="$(cygpath -aw "${JAVA}")"
 fi
 
+# filter is optional
+FILTER="${2}"
+
 # all underlying maven/ant projects are honring JAVA_HOME as main source of truth
 export JAVA_HOME="$JAVA"
 
@@ -75,6 +78,7 @@ mkdir -p $jtReport
 export SCRATCH_DISK="`pwd`/$jtWork"
 export WORKSPACE="`pwd`/$jtReport"
 
+export WHITELIST="$FILTER"
 bash ${RFAT}/run-folder-as-tests.sh $SCRIPT_DIR/jni $JAVA | tee test.${TIME}/tests.log
 
 tar -czf test.${TIME}.tar.gz "${jtWork}" "${jtReport}" || echo "Packing of results tarball failed"

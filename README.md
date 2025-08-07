@@ -19,8 +19,8 @@ Such variables may multiply.
 |jnr-process             | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-unixsocket          | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
-|lmdbjava                |               |               |               |               |               |
-|scala_partest_natives   |               |               |               |               |               |
+|lmdbjava                | ok///         | ok///         | ok///         | ok///         |               |
+|scala_partest_natives   | ok////        | ok////        |               |               |               |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |               |               |               |               |               |
 

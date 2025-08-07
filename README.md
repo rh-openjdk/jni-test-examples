@@ -22,10 +22,10 @@ lmdbjava for jdk21 and up needs `zig`.
 |jnr-process             | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-unixsocket          | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
-|lmdbjava                | ok///         | ok///         | ok///         | ok///         | ok///         |
+|lmdbjava                | ok[3]///      | ok[3]///      | ok///         | ok///         | ok///         |
 |scala_partest_natives   |               |               |               |               |               |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
-|wildfly-openssl         |               |               |               |               |               |
+|wildfly-openssl         | ok////        | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      |
 
 
 [1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...
@@ -33,6 +33,7 @@ lmdbjava for jdk21 and up needs `zig`.
 
 [2] skipped!  java.lang.NoSuchMethodError: java.nio.ByteBuffer.flip()Ljava/nio/ByteBuffer;
    -> no longer fixable
+[3] from forks (lmbdjava unmergable, scala hopes)
 
 # window x86_64/aarch64
 Unluckily I do not have windows arround

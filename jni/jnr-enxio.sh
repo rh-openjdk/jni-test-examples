@@ -13,17 +13,23 @@ rm -rf $sub
 mkdir  $sub
 pushd  $sub
 
-if [ "x$JDK_MAJOR" == "x" -o "0$JDK_MAJOR" -ge 21 ] ; then
-  JNR_LIVE_PROJECTS="jnr-enxio:0.32.18"
-  patch="true"
-elif [ "0$JDK_MAJOR" -ge 16 ] ; then
+if [ "0$JDK_MAJOR" -ge 21   ]; then
+  echo "!skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi..."
+  exit
+fi
+if [ "0$JDK_MAJOR" -eq 8   ]; then
+  echo "!skipped!  java.lang.NoSuchMethodError: java.nio.ByteBuffer.flip()Ljava/nio/ByteBuffer;"
+  exit
+fi
+JNR_LIVE_PROJECTS="jnr-enxio:0.32.18"
+patch=true
+if [ "0$JDK_MAJOR" -eq 17 ] ; then
   JNR_LIVE_PROJECTS="jnr-enxio:0.32.6"
   patch="true"
-else
-  JNR_LIVE_PROJECTS="jnr-enxio:0.28"
+elif [ "0$JDK_MAJOR" -eq 11 ] ; then
+  JNR_LIVE_PROJECTS="jnr-enxio:0.24"
   patch="false"
 fi
-
 for x in $JNR_LIVE_PROJECTS ; do
   project=`echo $x | sed "s/:.*//"`
   version=`echo $x | sed "s/.*://"`
@@ -36,6 +42,7 @@ for x in $JNR_LIVE_PROJECTS ; do
     tar -xf $project-$version.tar.gz
     pushd $project-$project-$version
   fi
+    if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
     if [ "x$patch" = "xtrue" ] ; then
 patch -p0 << EOF
 --- pom.xml
@@ -55,15 +62,9 @@ patch -p0 << EOF
          <groupId>org.apache.felix</groupId>
          <artifactId>maven-bundle-plugin</artifactId>
 EOF
-    set +x
-      jdkMajor=8
-	  for x in `seq 30 -1 11` ; do
-        if $java --version 2>&1 | grep "[- ]$x[.][0-9]\+[.][0-9]\+" ; then jdkMajor=$x ; break ; fi
-      done
-    set -x
-    sed "s;<maven.compiler.source>.*;<maven.compiler.source>$jdkMajor</maven.compiler.source>;" -i pom.xml
-    sed "s;<maven.compiler.target>.*;<maven.compiler.target>$jdkMajor</maven.compiler.target>;" -i pom.xml
     fi
+#    sed "s;<maven.compiler.source>.*;<maven.compiler.source>$JDK_MAJOR</maven.compiler.source>;" -i pom.xml
+#    sed "s;<maven.compiler.target>.*;<maven.compiler.target>$JDK_MAJOR</maven.compiler.target>;" -i pom.xml
     $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean install
   popd
 done

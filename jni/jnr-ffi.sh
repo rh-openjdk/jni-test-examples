@@ -14,7 +14,6 @@ if [ "x$JDK_MAJOR" == "x" -o "0$JDK_MAJOR" -ge 16 ] ; then
 else
   JNR_LIVE_PROJECTS="jnr-ffi:2.1.16"
 fi
-
 for x in $JNR_LIVE_PROJECTS ; do
   project=`echo $x | sed "s/:.*//"`
   version=`echo $x | sed "s/.*://"`
@@ -27,6 +26,7 @@ for x in $JNR_LIVE_PROJECTS ; do
     tar -xf $project-$version.tar.gz
     pushd $project-$project-$version
   fi
+    if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
     $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean install
   popd
 done

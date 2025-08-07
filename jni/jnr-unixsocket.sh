@@ -17,7 +17,6 @@ mkdir  $sub
 pushd  $sub
 
 JNR_LIVE_PROJECTS="jnr-unixsocket:0.33"
-
 for x in $JNR_LIVE_PROJECTS ; do
   project=`echo $x | sed "s/:.*//"`
   version=`echo $x | sed "s/.*://"`
@@ -31,7 +30,7 @@ for x in $JNR_LIVE_PROJECTS ; do
     pushd $project-$project-$version
   fi
 
-if [ "x$OTOOL_ARCH" = "xppc64le" ] ; then
+if [ "x$OS_ARCH" = "xppc64le" ] ; then
     # https://github.com/jnr/jnr-unixsocket/issues/88 issue in java ffi, ffi or unixsocket itself on ppc64le
     f=`find -type f | grep CredentialsFunctionalTest.java$`
     sed "s/import org.junit.Test;/import org.junit.Test;import org.junit.Ignore;/" -i $f
@@ -79,19 +78,14 @@ patch -p1 <<EOF
        <plugin>
          <artifactId>maven-pmd-plugin</artifactId>
 EOF
-    set +x
-      jdkMajor=8
-	  for x in `seq 30 -1 11` ; do
-        if $java --version 2>&1 | grep "[- ]$x[.][0-9]\+[.][0-9]\+" ; then jdkMajor=$x ; break ; fi
-      done
-    set -x
-    if [ $jdkMajor -ge 17 ] ; then
+    if [ $JDK_MAJOR -ge 17 ] ; then
       sed "s/2.3.7/6.0.0/g" -i pom.xml #fixme, upstream, javadoc fix
     fi
-    if [ $jdkMajor -eq 11 ] ; then
+    if [ $JDK_MAJOR -eq 11 ] ; then
       sed "s/2.3.7/5.1.9/g" -i pom.xml #fixme, upstream, javadoc fix
     fi
-    sed "s/1.7/$jdkMajor/g" -i pom.xml #fixme, upstream
+    sed "s/1.7/$JDK_MAJOR/g" -i pom.xml #fixme, upstream
+   if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
     # on ppc64le, mvn assembly sometimes fails on eom. If it will persists,  mvn isntall failureless without tests , and mvn tests later
     echo "mvn install"
     $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean install || true

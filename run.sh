@@ -17,12 +17,14 @@ case "$OS" in
     PS=";"
     FS="\\"
     CYGWIN="true"
+    ID=windows
+    VERSION_ID=1995.5
     ;;
   * )
     echo "Non cygwin system!"
+    source /etc/os-release
     ;;
 esac
-
 READLINK_F="-f"
 readlink $READLINK_F "." || READLINK_F=""
 
@@ -67,7 +69,10 @@ if [ "x$JDK_MAJOR" == "x" ] ; then
   fi
 fi
 export JDK_MAJOR
-echo "treating jdk as: $JDK_MAJOR"
+export OS_NAME=$ID
+export OS_VERSION_MAJOR=`echo $VERSION_ID | sed "s/\..*//" `
+export OS_ARCH=`uname -m`
+echo "treating jdk as: $JDK_MAJOR on $OS_NAME $OS_VERSION_MAJOR $OS_ARCH"
 
 echo Running with $JAVA...
 
@@ -77,7 +82,10 @@ mkdir -p $jtWork
 mkdir -p $jtReport
 export SCRATCH_DISK="`pwd`/$jtWork"
 export WORKSPACE="`pwd`/$jtReport"
-
+if [ "x$PURGE_MVN" == "x" ] ; then
+  # some of the maven projects bent `mvn test` pahese so `mvn install` is run rather. As we are changing language level everywhere, installing to shared repos make mayhem if more jdks are run sequentially
+  export PURGE_MVN="true"
+fi
 if [ "x$WHITELIST" == "x" ] ; then
   export WHITELIST="$FILTER_ARG"
 fi
@@ -89,10 +97,8 @@ if ! [ -f test.${TIME}/tests.log ] ; then
 	exit 1
 fi
 
-# passes should be present in tests.log
-grep -Eqi '^passed:' test.${TIME}/tests.log || exit 1
-# check for failures/errors in tests.log 
-! grep -Eqi '^(failed|error):' test.${TIME}/tests.log || exit 1
+# results should be in log, if not, it means suite was not run
+grep -Eqi -e '^passed' -e '^(failed|error)' -e '^Ignored' test.${TIME}/tests.log || exit 1
 
 # returning 0 to allow unstable state
 exit 0

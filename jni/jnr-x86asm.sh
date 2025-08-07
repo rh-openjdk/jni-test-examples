@@ -10,7 +10,7 @@ mkdir  $sub
 pushd  $sub
 
 JNR_LIVE_PROJECTS="jnr-x86asm:1.0.2" #warning missing name in tag
-
+if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
 for x in $JNR_LIVE_PROJECTS ; do
   project=`echo $x | sed "s/:.*//"`
   version=`echo $x | sed "s/.*://"`
@@ -23,14 +23,9 @@ for x in $JNR_LIVE_PROJECTS ; do
     tar -xf $project-$version.tar.gz
     pushd $project-$project-$version
   fi
-    set +x
-      jdkMajor=8
-	  for x in `seq 30 -1 11` ; do
-        if $java --version 2>&1 | grep "[- ]$x[.][0-9]\+[.][0-9]\+" ; then jdkMajor=$x ; break ; fi
-      done
-    set -x
-    sed "s;<maven.compiler.source>.*;<maven.compiler.source>$jdkMajor</maven.compiler.source>;" -i pom.xml
-    sed "s;<maven.compiler.target>.*;<maven.compiler.target>$jdkMajor</maven.compiler.target>;" -i pom.xml
+    sed "s;<maven.compiler.source>.*;<maven.compiler.source>$JDK_MAJOR</maven.compiler.source>;" -i pom.xml
+    sed "s;<maven.compiler.target>.*;<maven.compiler.target>$JDK_MAJOR</maven.compiler.target>;" -i pom.xml
+    if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
     $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean install
   popd
 done

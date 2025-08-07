@@ -11,7 +11,7 @@ if [ "x$OTOOL_OS_NAME" = "xel" -a "x$OTOOL_OS_VERSION" = "x7" ] ; then
 else
   MVN="$EX_MVN $MVOPTS"
 fi
-
+if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
 mkdir  lmdbjava
 pushd  lmdbjava
   ARCH=`uname -m`

@@ -7,7 +7,7 @@ Want to run just subset? Set second parameter as regex, or export WHITELIST/BLAC
 If you would run individual test manually, `export JDK_MAJOR=` to numerical version of jdk. Eg 8 or 21...
 Such variables may multiply.
 
-# Fedora x86_64/aarch64/ppc64/s390
+# Fedora 41 x86_64/aarch64/ppc64/s390
 | suite/jdk              | jdk8          | jdk11         | jdk17         | jdk21         | jdk25         |
 | -----------------------| ------------- | ------------- | ------------- | ------------- | ------------- |
 |jnr-a64asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
@@ -21,7 +21,7 @@ Such variables may multiply.
 |jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
 |lmdbjava                |               |               |               |               |               |
 |scala_partest_natives   |               |               |               |               |               |
-|tomcat-native           |               |               |               |               |               |
+|tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |               |               |               |               |               |
 
 

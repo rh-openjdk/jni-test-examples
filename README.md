@@ -23,9 +23,9 @@ lmdbjava for jdk21 and up needs `zig`.
 |jnr-unixsocket          | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
 |lmdbjava                | ok[3]///      | ok[3]///      | ok///         | ok///         | ok///         |
-|scala_partest_natives   |               |               |               |               |               | - gosh, do not hnour java_home everywhere
+|scala_partest_natives   | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
-|wildfly-openssl         | ok////        | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      |
+|wildfly-openssl         |               |               |               |               |               |
 
 
 [1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...

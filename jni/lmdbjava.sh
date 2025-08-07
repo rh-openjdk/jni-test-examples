@@ -57,7 +57,12 @@ else
   pushd lmdbjava
     sh cross-compile.sh
     git checkout lmdbjava-0.9.1
-    $MVN clean install
+    if [ "0$JDK_MAJOR" -ge 25 ] ; then
+      ## jacoco prints a lot of errors,but it seesm to passe same 222 tests as with jdk21
+      $MVN clean install -Dfmt.skip
+    else
+      $MVN clean install
+    fi
   popd
 fi
 popd

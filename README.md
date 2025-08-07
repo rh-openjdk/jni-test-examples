@@ -7,6 +7,9 @@ Want to run just subset? Set second parameter as regex, or export WHITELIST/BLAC
 If you would run individual test manually, `export JDK_MAJOR=` to numerical version of jdk. Eg 8 or 21...
 Such variables may multiply.
 
+# deps
+lmdbjava for jdk21 and up needs `zig`. 
+
 # Fedora 41 x86_64/aarch64/ppc64/s390
 | suite/jdk              | jdk8          | jdk11         | jdk17         | jdk21         | jdk25         |
 | -----------------------| ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -19,7 +22,7 @@ Such variables may multiply.
 |jnr-process             | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-unixsocket          | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
-|lmdbjava                | ok///         | ok///         | ok///         | ok///         |               |
+|lmdbjava                | ok///         | ok///         | ok///         | ok///         | ok///         |
 |scala_partest_natives   | ok////        | ok////        |               |               |               |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |               |               |               |               |               |

@@ -23,7 +23,7 @@ lmdbjava for jdk21 and up needs `zig`.
 |jnr-unixsocket          | ok///         | ok///         | ok///         | ok///         | ok///         |
 |jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
 |lmdbjava                | ok///         | ok///         | ok///         | ok///         | ok///         |
-|scala_partest_natives   | ok////        | ok////        |               |               |               |
+|scala_partest_natives   |               |               |               |               |               |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |               |               |               |               |               |
 

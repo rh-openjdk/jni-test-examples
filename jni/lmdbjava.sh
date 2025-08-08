@@ -52,7 +52,7 @@ EOF
 else
   git clone https://github.com/lmdbjava/lmdbjava.git
   if ! which zig ; then 
-    sudo dnf install -y zig;
+    sudo dnf install -y zig || echo "zig from repos failed!"
   fi
   pushd lmdbjava
     sh cross-compile.sh

@@ -12,6 +12,20 @@ else
   MVN="$EX_MVN $MVOPTS"
 fi
 
+setZig() {
+  local larch=`uname -m`
+  if [ "x$larch" == "ppc64le" ] ; then
+    larch=powerpc64le
+  fi
+  local ldir=zig-"$larch"-linux-0.15.0-dev.1380+e98aeeb73
+  echo "Setting zig from cmdline: $ldir"
+  local lname="$ldir.tar.xz"
+  curl -k -f -L -O "https://ziglang.org/builds/$lname"
+  tar -xf $lname
+  export PATH="`pwd`/$ldir:$PATH"
+}
+
+
 mkdir  lmdbjava
 pushd  lmdbjava
 if [ "0$JDK_MAJOR" -le 12 ] ; then
@@ -52,7 +66,7 @@ EOF
 else
   git clone https://github.com/lmdbjava/lmdbjava.git
   if ! which zig ; then 
-    sudo dnf install -y zig || echo "zig from repos failed!"
+    sudo dnf install -y zig || setZig
   fi
   pushd lmdbjava
     sh cross-compile.sh

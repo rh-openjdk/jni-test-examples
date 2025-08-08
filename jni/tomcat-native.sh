@@ -41,7 +41,6 @@ pushd  tomcat-native
   tomcat_native=${tomcat_native_version}.tar.gz
   wget --no-check-certificate https://github.com/apache/tomcat-native/archive/$tomcat_native
   tar -xf $tomcat_native
-  export JAVA_HOME=/usr/lib/jvm/java
   pushd tomcat-native-${tomcat_native_version}
     D="-Dbase.path=`pwd` -Dbase-maven.loc=https://repo.maven.apache.org/maven2"
     $ANT_HOME/bin/ant $D

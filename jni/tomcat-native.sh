@@ -26,22 +26,27 @@ pushd  tomcat-native
   fi
   tar -xf $ANT
   export ANT_HOME="`pwd`/apache-ant-$ant_version/"
-  wget --no-check-certificate https://github.com/apache/tomcat-native/archive/1.2.24.tar.gz
-  APR=apr-1.7.0.tar.gz
+  APR=apr-1.7.0
+  APR_FILE=${APR}.tar.gz
   if [ ! -e $APR ] ; then
-    cp "/mnt/shared/jdk-images/apache/$APR" . || echo "local copy $APR  not found, will try to download"
+    cp "/mnt/shared/jdk-images/apache/$APR_FILE" . || echo "local copy $APR  not found, will try to download"
   fi
-  if [ ! -e $APR ] ; then
+  if [ ! -e $APR_FILE ] ; then
+    APR=apr-1.7.6
+    APR_FILE=${APR}.tar.gz
     wget --no-check-certificate https://mirror.hosting90.cz/apache/apr/$APR
   fi
-  tar -xf 1.2.24.tar.gz
-  tar -xf $APR
+  tar -xf $APR_FILE
+  tomcat_native_version=1.2.24
+  tomcat_native=${tomcat_native_version}.tar.gz
+  wget --no-check-certificate https://github.com/apache/tomcat-native/archive/$tomcat_native
+  tar -xf $tomcat_native
   export JAVA_HOME=/usr/lib/jvm/java
-  pushd tomcat-native-1.2.24
+  pushd tomcat-native-${tomcat_native_version}
     D="-Dbase.path=`pwd` -Dbase-maven.loc=https://repo.maven.apache.org/maven2"
     $ANT_HOME/bin/ant $D
     pushd native
-      sh buildconf --with-apr=../../apr-1.7.0
+      sh buildconf --with-apr=../../$APR
       ./configure
       make 
     popd

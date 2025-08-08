@@ -1,0 +1,53 @@
+name: "test"
+
+on:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - "*"
+
+jobs:
+  test-linux-jtreg:
+    name: "Linux Jtreg"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        jdkconf:
+          - JDK 8
+          - JDK 11
+          - JDK 17
+          - JDK 21
+        include:
+          - jdkconf: JDK 8
+            jdkver: "8"
+          - jdkconf: JDK 11
+            jdkver: "11"
+          - jdkconf: JDK 17
+            jdkver: "17"
+          - jdkconf: JDK 21
+            jdkver: "21"
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install dependencies"
+        run: |
+          sudo apt-get update
+          sudo apt-get install zig || true
+          sudo apt-get install apr apr-devel || true
+          sudo apt-get install make openssl openssl-devel gcc pkg-config ant maven
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.jdkver}}
+      - name: Run
+        run: ./run.sh "${JAVA_HOME}"
+      - name: Upload results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: "linux-jtreg-jdk${{ matrix.jdkver}}"
+          path: "test.*.tar.gz"
+

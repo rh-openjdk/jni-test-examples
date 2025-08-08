@@ -91,7 +91,11 @@ if [ "x$WHITELIST" == "x" ] ; then
 fi
 bash ${RFAT}/run-folder-as-tests.sh $SCRIPT_DIR/jni $JAVA | tee test.${TIME}/tests.log
 
-tar -czf test.${TIME}.tar.gz "${jtWork}" "${jtReport}" || echo "Packing of results tarball failed"
+toPack="${jtReport}"
+if [ "x$JNI_PACK_WORK" == "xtrue" ] ; then
+toPack="$toPack ${jtWork}";
+fi
+tar -czf test.${TIME}.tar.gz  $toPack || echo "Packing of results tarball failed"
 if ! [ -f test.${TIME}/tests.log ] ; then
 	echo "Missing tests.log!" 1>&2
 	exit 1

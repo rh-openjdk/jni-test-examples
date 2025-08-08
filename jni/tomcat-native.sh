@@ -20,6 +20,8 @@ pushd  tomcat-native
     cp "/mnt/shared/jdk-images/apache/$ANT" . || echo "local copy $ANT  not found, will try to download"
   fi
   if [ ! -e $ANT ] ; then
+    ant_version=1.10.15
+    ANT=apache-ant-$ant_version-bin.tar.xz
     wget --no-check-certificate https://mirror.hosting90.cz/apache/ant/binaries/$ANT
   fi
   tar -xf $ANT

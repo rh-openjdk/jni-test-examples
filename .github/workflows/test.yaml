@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-linux-jtreg:
-    name: "Linux Jtreg"
+    name: "Linux run.sh"
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false

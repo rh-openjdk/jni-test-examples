@@ -98,7 +98,13 @@ if ! [ -f test.${TIME}/tests.log ] ; then
 fi
 
 # results should be in log, if not, it means suite was not run
-grep -Eqi -e '^passed' -e '^(failed|error)' -e '^Ignored' test.${TIME}/tests.log || exit 1
+grep -Eqi -e '^passed' -e '^(failed|error)' -e '^Ignored' test.${TIME}/tests.log || exit 2
 
-# returning 0 to allow unstable state
+if [ "x$JNI_FAIL" == "xtrue" ] ; then
+  if grep -Eq -e '^Failed: [1-9]' ; then
+    exit 1
+  fi
+fi
+# unless JNI_FAIL=true, exiting with zero to leave decission on following toolchain
 exit 0
+

@@ -91,14 +91,24 @@ if [ "x$WHITELIST" == "x" ] ; then
 fi
 bash ${RFAT}/run-folder-as-tests.sh $SCRIPT_DIR/jni $JAVA | tee test.${TIME}/tests.log
 
-tar -czf test.${TIME}.tar.gz "${jtWork}" "${jtReport}" || echo "Packing of results tarball failed"
+toPack="${jtReport} test.${TIME}/tests.log"
+if [ "x$JNI_PACK_WORK" == "xtrue" ] ; then
+toPack="$toPack ${jtWork}";
+fi
+tar -czf test.${TIME}.tar.gz  $toPack || echo "Packing of results tarball failed"
 if ! [ -f test.${TIME}/tests.log ] ; then
 	echo "Missing tests.log!" 1>&2
 	exit 1
 fi
 
 # results should be in log, if not, it means suite was not run
-grep -Eqi -e '^passed' -e '^(failed|error)' -e '^Ignored' test.${TIME}/tests.log || exit 1
+grep -Eqi -e '^passed' -e '^(failed|error)' -e '^Ignored' test.${TIME}/tests.log || exit 2
 
-# returning 0 to allow unstable state
+if [ "x$JNI_FAIL" == "xtrue" ] ; then
+  if grep -Eq -e '^Failed: [1-9]' test.${TIME}/tests.log  ; then
+    exit 1
+  fi
+fi
+# unless JNI_FAIL=true, exiting with zero to leave decission on following toolchain
 exit 0
+

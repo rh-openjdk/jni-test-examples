@@ -91,7 +91,7 @@ if [ "x$WHITELIST" == "x" ] ; then
 fi
 bash ${RFAT}/run-folder-as-tests.sh $SCRIPT_DIR/jni $JAVA | tee test.${TIME}/tests.log
 
-toPack="${jtReport}"
+toPack="${jtReport} test.${TIME}/tests.log"
 if [ "x$JNI_PACK_WORK" == "xtrue" ] ; then
 toPack="$toPack ${jtWork}";
 fi
@@ -105,7 +105,7 @@ fi
 grep -Eqi -e '^passed' -e '^(failed|error)' -e '^Ignored' test.${TIME}/tests.log || exit 2
 
 if [ "x$JNI_FAIL" == "xtrue" ] ; then
-  if grep -Eq -e '^Failed: [1-9]' ; then
+  if grep -Eq -e '^Failed: [1-9]' test.${TIME}/tests.log  ; then
     exit 1
   fi
 fi

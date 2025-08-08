@@ -10,7 +10,6 @@ mkdir  $sub
 pushd  $sub
 
 JNR_LIVE_PROJECTS="jnr-x86asm:1.0.2" #warning missing name in tag
-if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
 for x in $JNR_LIVE_PROJECTS ; do
   project=`echo $x | sed "s/:.*//"`
   version=`echo $x | sed "s/.*://"`

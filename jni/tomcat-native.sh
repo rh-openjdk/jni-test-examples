@@ -34,7 +34,7 @@ pushd  tomcat-native
   if [ ! -e $APR_FILE ] ; then
     APR=apr-1.7.6
     APR_FILE=${APR}.tar.gz
-    wget --no-check-certificate https://mirror.hosting90.cz/apache/apr/$APR
+    wget --no-check-certificate https://dlcdn.apache.org//apr/$APR_FILE
   fi
   tar -xf $APR_FILE
   tomcat_native_version=1.2.24

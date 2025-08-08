@@ -35,8 +35,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install zig || true
-          sudo apt-get install apr apr-devel || true
-          sudo apt-get install make openssl openssl-devel gcc pkg-config ant maven
+          sudo apt-get install ibapr1*
+          sudo apt-get install make openssl libssl-dev gcc pkg-config ant maven
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:

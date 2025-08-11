@@ -1,6 +1,11 @@
 #!/bin/bash
-
 set -exo pipefail
+
+if [ "0$JDK_MAJOR" -eq 8   ]; then
+  echo "!skipped!  older wildfly needed for jdk8"
+  exit
+fi
+
 MVOPTS="--batch-mode"
 if [ "x$EX_MVN" == "x" ] ; then
  EX_MVN=mvn

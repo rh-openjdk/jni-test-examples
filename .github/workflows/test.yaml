@@ -29,6 +29,8 @@ jobs:
             jdkver: "17"
           - jdkconf: JDK 21
             jdkver: "21"
+          - jdkconf: JDK 24
+            jdkver: "24"
     steps:
       - uses: actions/checkout@v3
       - name: "Install dependencies"

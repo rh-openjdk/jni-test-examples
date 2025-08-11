@@ -1,131 +1,78 @@
+#!/bin/bash
 set -exo pipefail
+
+if [ "0$JDK_MAJOR" -eq 8   ]; then
+  echo "!skipped!  older wildfly needed for jdk8"
+  exit
+fi
+
 MVOPTS="--batch-mode"
 if [ "x$EX_MVN" == "x" ] ; then
  EX_MVN=mvn
 fi
 
+DISABLE_testNoExplicitEnabledProtocols="true"
+DISABLE_testMultipleEnabledProtocolsWithClientProtocolWithinEnabledRange="true"
+DISABLE_testCipherSuiteConverter="true"
+DISABLE_testAvailableProtocolsWithTLS13CipherSuites="true"
+
+function addIgnoreImport() {
+  if ! grep -e "import org.junit.Ignore" "${1}" ; then #do not create duplicated imports
+    sed "s/import org.junit.Test;/import org.junit.Test;import org.junit.Ignore;/" -i "${1}"
+  fi
+}
+
+ignoredTests=0
+function ignoreMethod() {
+  local file=$(find -type f | grep "${2}.java$")
+  grep    -e "${1}[(]" "${file}" #check
+  # do not inject ignore import if nothing will be sed
+  addIgnoreImport "${file}"
+  sed "s/${1}[(]/@Ignore ${1}(/g" -i "${file}"
+  grep -e "@Ignore ${1}[(]" "${file}" #check
+  let ignoredTests=$ignoredTests+1
+}
+
+
 # for generating patches
 #GIT=git
 GIT=echo
 
+VERSION=2.2.5.Final
 rm -rf wildfly-openssl
 mkdir  wildfly-openssl
 pushd  wildfly-openssl
-  wget https://github.com/wildfly-security/wildfly-openssl/archive/1.1.1.Final.tar.gz
-  tar -xf 1.1.1.Final.tar.gz
+  wget https://github.com/wildfly-security/wildfly-openssl/archive/refs/tags/${VERSION}.tar.gz
+  tar -xf ${VERSION}.tar.gz
   # generally the testsuite is poorly designed. see SSLTestUtils.java
   # it reuses still same port, and do not release it in finally clausule,
   # so although it uses setReuseAddress, any first fail will kill all subsequent tests
   # as the port seems to survive junit's vm
-  pushd wildfly-openssl-1.1.1.Final
+  pushd wildfly-openssl-${VERSION}
   $GIT init
   $GIT add *
   $GIT commit . -m "initial commit"
-    f=`find -type f | grep BasicOpenSSLEngineTest.java$`
-    sed "s/import org.junit.Test;/import org.junit.Test;import org.junit.Ignore;/" -i $f
-    # this test fails with different crypto policies
-    sed "s/public void testNoExplicitEnabledProtocols/@Ignore public void testNoExplicitEnabledProtocols/g" -i $f
-    if [ "x$OTOOL_OS_VERSION" = "x7" -a "x$OTOOL_OS_NAME" = "xel" ] ; then
-        # tls v 1.0 is being  removed
-        sed "s/public void testMultipleEnabledProtocolsWithClientProtocolWithinEnabledRange/@Ignore public void testMultipleEnabledProtocolsWithClientProtocolWithinEnabledRange/g" -i $f
+    if [ "$DISABLE_testNoExplicitEnabledProtocols" = "true" ] ; then
+      # this test fails with different crypto policies
+      ignoreMethod "public void testNoExplicitEnabledProtocols" "BasicOpenSSLEngineTest"
     fi
-    f=`find -type f | grep SslCiphersTest.java$`
-    sed "s/import org.junit.Test;/import org.junit.Test;import org.junit.Ignore;/" -i $f
-    # this test fails with different crypto policies and there is no JNI at all. However to find wy it fials is interesting TODO.
-    sed "s/public void testCipherSuiteConverter/@Ignore public void testCipherSuiteConverter/g" -i $f
-    patch -p1 <<EOF
---- a/java/src/test/java/org/wildfly/openssl/SSLTestUtils.java
-+++ a/java/src/test/java/org/wildfly/openssl/SSLTestUtils.java
-@@ -41,8 +41,8 @@
- public class SSLTestUtils {
- 
-     public static final String HOST = System.getProperty("org.wildfly.openssl.test.host", "localhost");
--    public static final int PORT = Integer.parseInt(System.getProperty("org.wildfly.openssl.test.port", "7677"));
--    public static final int SECONDARY_PORT = Integer.parseInt(System.getProperty("org.wildfly.openssl.test.secondary.port", "7687"));
-+    public static final int PORT = Integer.parseInt(System.getProperty("org.wildfly.openssl.test.port", ""+findFreePort()));
-+    public static final int SECONDARY_PORT = Integer.parseInt(System.getProperty("org.wildfly.openssl.test.secondary.port", ""+findFreePort()));
- 
-     private static KeyStore loadKeyStore(final String name) throws IOException {
-         final InputStream stream = BasicOpenSSLEngineTest.class.getClassLoader().getResourceAsStream(name);
-@@ -165,6 +165,17 @@
-         return out.toByteArray();
-     }
- 
-+    public static int findFreePort() {
-+        try (ServerSocket socket = new ServerSocket(0)) {
-+            int i = socket.getLocalPort();
-+            socket.close();
-+            Thread.sleep(1000);
-+            return i;
-+        } catch (Exception e) {
-+        }
-+        return -1;
-+    }
-+
-     public static ServerSocket createServerSocket() throws IOException {
-         return createServerSocket(PORT);
-     }
-EOF
-    $GIT commit . -m "excluded some tests"
-    patch -p1 <<EOF
-diff --git a/java/src/test/java/org/wildfly/openssl/AbstractOpenSSLTest.java b/java/src/test/java/org/wildfly/openssl/AbstractOpenSSLTest.java
-index 56d2357..f67442a 100644
---- a/java/src/test/java/org/wildfly/openssl/AbstractOpenSSLTest.java
-+++ b/java/src/test/java/org/wildfly/openssl/AbstractOpenSSLTest.java
-@@ -18,6 +18,7 @@
- package org.wildfly.openssl;
- 
- import org.junit.BeforeClass;
-+import org.junit.Before;
- 
- /**
-  * @author Stuart Douglas
-@@ -26,6 +27,12 @@ public class AbstractOpenSSLTest {
- 
-     private static boolean first = true;
- 
-+    @Before
-+    public void reinitPorts(){
-+        SSLTestUtils.resetPort();
-+        SSLTestUtils.resetSecondaryPort();
-+    }
-+
-     @BeforeClass
-     public static void setup() {
-         if(first) {
-diff --git a/java/src/test/java/org/wildfly/openssl/SSLTestUtils.java b/java/src/test/java/org/wildfly/openssl/SSLTestUtils.java
-index f7a4261..8c4aa3d 100644
---- a/java/src/test/java/org/wildfly/openssl/SSLTestUtils.java
-+++ b/java/src/test/java/org/wildfly/openssl/SSLTestUtils.java
-@@ -41,8 +41,24 @@ import javax.net.ssl.TrustManagerFactory;
- public class SSLTestUtils {
- 
-     public static final String HOST = System.getProperty("org.wildfly.openssl.test.host", "localhost");
--    public static final int PORT = Integer.parseInt(System.getProperty("org.wildfly.openssl.test.port", ""+findFreePort()));
--    public static final int SECONDARY_PORT = Integer.parseInt(System.getProperty("org.wildfly.openssl.test.secondary.port", ""+findFreePort()));
-+    public static int PORT = initPort();
-+    public static int SECONDARY_PORT = initSecondaryPort();
-+
-+    private static int initPort() {
-+        return Integer.parseInt(System.getProperty("org.wildfly.openssl.test.port", ""+findFreePort()));
-+    }
-+
-+    private static int initSecondaryPort() {
-+        return Integer.parseInt(System.getProperty("org.wildfly.openssl.test.secondary.port", ""+findFreePort()));
-+    }
-+
-+    public static void resetPort(){
-+        PORT=initPort();
-+    }
-+
-+    public static void resetSecondaryPort(){
-+        SECONDARY_PORT=initSecondaryPort();
-+    }
- 
-     private static KeyStore loadKeyStore(final String name) throws IOException {
-         final InputStream stream = BasicOpenSSLEngineTest.class.getClassLoader().getResourceAsStream(name);
-EOF
-    $GIT commit . -m "make port random/free for each method"
+    if [  "$DISABLE_testMultipleEnabledProtocolsWithClientProtocolWithinEnabledRange" = "true"  ] ; then
+      # tls v 1.0 is being  removed
+      ignoreMethod "public void testMultipleEnabledProtocolsWithClientProtocolWithinEnabledRange" "BasicOpenSSLEngineLegacyProtocolsTest"
+    fi
+    if [  "$DISABLE_testCipherSuiteConverter" = "true"  ] ; then
+      # this test fails with different crypto policies and there is no JNI at all. However to find wy it fials is interesting TODO.
+      ignoreMethod "public void testCipherSuiteConverter" "SslCiphersTest"
+    fi
+    if [  "$DISABLE_testAvailableProtocolsWithTLS13CipherSuites" = "true"  ] ; then
+    # tls 1.3
+      ignoreMethod  "public void testAvailableProtocolsWithTLS13CipherSuites"  "SslCiphersTest"
+    fi
+    if [ $ignoredTests -gt 0 ] ; then
+      $GIT  commit . -m "disbaled $ignoredTests tests"
+    else
+      echo "No test ignored"
+    fi
     # it is better to set the libssl and libcrypto on our own
     # the wildfly-openssl search is just tragic, and the excception throwns out of it are very missleading
     # eg "not found ssl library" may be thrown from findCryptoLibray (where findSSL have passed fine)

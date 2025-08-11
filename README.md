@@ -27,12 +27,14 @@ lmdbjava for jdk21 and up needs `zig`.
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |   s[4]        | ok///         | ok///         | ok///         | ok///         |
 
-[1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...
+[1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...</br>
 	   -> todo fix in upstream
 
-[2] !skipped!  java.lang.NoSuchMethodError: java.nio.ByteBuffer.flip()Ljava/nio/ByteBuffer;
+[2] !skipped!  java.lang.NoSuchMethodError: java.nio.ByteBuffer.flip()Ljava/nio/ByteBuffer;</br>
    -> no longer fixable
+
 [3] from forks (lmbdjava unmergable, scala hopes)
+
 [4] !skipped!  older wildfly needed for jdk8
 
 # window x86_64/aarch64

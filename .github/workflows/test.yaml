@@ -43,7 +43,7 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.jdkver}}
       - name: Run
-        run: BLACKLIST="wildfly-openssl.*" JNI_FAIL=true RFAT_RERUNS=2 bash ./run.sh "${JAVA_HOME}"
+        run: JNI_FAIL=true RFAT_RERUNS=2 bash ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
         uses: actions/upload-artifact@v4

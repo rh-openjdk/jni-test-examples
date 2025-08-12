@@ -26,6 +26,7 @@ lmdbjava for jdk21 and up needs `zig`.
 |scala_partest_natives   | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |   s[4]        | ok///         | ok///         | ok///         | ok///         |
+|wildfly8-openssl        |   f[6]        |   s[5]        |   s[5]        |   s[5]        |   s[5]        |
 
 [1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...</br>
 	   -> todo fix in upstream
@@ -37,6 +38,9 @@ lmdbjava for jdk21 and up needs `zig`.
 
 [4] !skipped!  older wildfly needed for jdk8</br>
    -> todo, fix here hopefully
+[5] !skipped!  newer wildfly needed for jdk newer then 8</br>
+   -> intyetnionally jdk8 onlyu
+[6] this test currently fails - the goal is to investigate if there is any environemnt where it can pass
 
 # window x86_64/aarch64
 Unluckily I do not have windows arround

@@ -38,10 +38,16 @@ function ignoreMethod() {
 #GIT=git
 GIT=echo
 
+NATIVES_VERSION=2.2.2.Final
 VERSION=2.2.5.Final
 rm -rf wildfly-openssl
 mkdir  wildfly-openssl
 pushd  wildfly-openssl
+  wget https://github.com/wildfly-security/wildfly-openssl-natives/archive/refs/tags/${NATIVES_VERSION}.tar.gz
+  tar -xf ${NATIVES_VERSION}.tar.gz
+  pushd wildfly-openssl-natives-${NATIVES_VERSION}
+    $EX_MVN $MVOPTS clean install
+  popd
   wget https://github.com/wildfly-security/wildfly-openssl/archive/refs/tags/${VERSION}.tar.gz
   tar -xf ${VERSION}.tar.gz
   # generally the testsuite is poorly designed. see SSLTestUtils.java

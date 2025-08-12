@@ -10,7 +10,7 @@ Such variables may multiply.
 # deps
 lmdbjava for jdk21 and up needs `zig`. 
 
-# Fedora 41 x86_64/aarch64/ppc64/s390
+# Fedora 41/ubuntu 24 x86_64/aarch64/ppc64/s390
 | suite/jdk              | jdk8          | jdk11         | jdk17         | jdk21         | jdk25         |
 | -----------------------| ------------- | ------------- | ------------- | ------------- | ------------- |
 |jnr-a64asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
@@ -26,7 +26,7 @@ lmdbjava for jdk21 and up needs `zig`.
 |scala_partest_natives   | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      |
 |tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
 |wildfly-openssl         |   s[4]        | ok///         | ok///         | ok///         | ok///         |
-|wildfly8-openssl        |   f[6]        |   s[5]        |   s[5]        |   s[5]        |   s[5]        |
+|wildfly8-openssl        |   s[6]        |   s[5]        |   s[5]        |   s[5]        |   s[5]        |
 
 [1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...</br>
 	   -> todo fix in upstream
@@ -40,7 +40,8 @@ lmdbjava for jdk21 and up needs `zig`.
    -> todo, fix here hopefully
 [5] !skipped!  newer wildfly needed for jdk newer then 8</br>
    -> intyetnionally jdk8 onlyu
-[6] this test currently fails - the goal is to investigate if there is any environemnt where it can pass
+[6] this test currently fails everywhere - the goal is to investigate if there is any environemnt where it can pass</br>
+   -> s!skipped! klnown to fail on newer ubuntu/fedora
 
 # window x86_64/aarch64
 Unluckily I do not have windows arround

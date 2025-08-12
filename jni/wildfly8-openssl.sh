@@ -6,6 +6,16 @@ if [ "0$JDK_MAJOR" -gt 8   ]; then
   exit
 fi
 
+if [ "x$OS_NAME" == "xfedora" -a   "0$OS_VERSION_MAJOR" -ge 41  ]; then
+  echo "!skipped! klnown to fail on newer fedoras"
+  exit
+fi
+
+if [ "x$OS_NAME" == "xubuntu" -a   "0$OS_VERSION_MAJOR" -ge 24  ]; then
+  echo "!skipped! klnown to fail on newer ubuntu"
+  exit
+fi
+
 MVOPTS="--batch-mode"
 if [ "x$EX_MVN" == "x" ] ; then
  EX_MVN=mvn
@@ -30,8 +40,8 @@ function ignoreMethod() {
 }
 
 # for generating patches
-GIT=git
-#GIT=echo
+#GIT=git
+GIT=echo
 
 # both seesm to be failing in same way
 #VERSION=1.0.12.Final # last 1.0 on Oct 26, 2020

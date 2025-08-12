@@ -35,7 +35,8 @@ lmdbjava for jdk21 and up needs `zig`.
 
 [3] from forks (lmbdjava unmergable, scala hopes)
 
-[4] !skipped!  older wildfly needed for jdk8
+[4] !skipped!  older wildfly needed for jdk8</br>
+   -> todo, fix here hopefully
 
 # window x86_64/aarch64
 Unluckily I do not have windows arround

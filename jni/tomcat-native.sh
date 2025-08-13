@@ -26,14 +26,12 @@ pushd  tomcat-native
   fi
   tar -xf $ANT
   export ANT_HOME="`pwd`/apache-ant-$ant_version/"
-  APR=apr-1.7.0
+  APR=apr-1.7.6
   APR_FILE=${APR}.tar.gz
   if [ ! -e $APR ] ; then
     cp "/mnt/shared/jdk-images/apache/$APR_FILE" . || echo "local copy $APR  not found, will try to download"
   fi
   if [ ! -e $APR_FILE ] ; then
-    APR=apr-1.7.6
-    APR_FILE=${APR}.tar.gz
     wget --no-check-certificate https://dlcdn.apache.org//apr/$APR_FILE
   fi
   tar -xf $APR_FILE

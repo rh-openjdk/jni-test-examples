@@ -15,6 +15,8 @@ ant_version=1.10.7
 pushd  tomcat-native
   sudo $III install -y apr apr-devel  || true # usally not preinstalled
   sudo $III install -y openssl openssl-devel || true # usually we should have it preinstalled
+  sudo $III install -y autoconf || true # usually we should have it preinstalled
+  sudo $III install -y redhat-rpm-config || true # usually we should have it preinstalled
   ANT=apache-ant-$ant_version-bin.tar.xz
   if [ ! -e $ANT ] ; then
     cp "/mnt/shared/jdk-images/apache/$ANT" . || echo "local copy $ANT  not found, will try to download"

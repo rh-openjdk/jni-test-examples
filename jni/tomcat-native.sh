@@ -1,5 +1,8 @@
 set -exo pipefail
 
+#if /usr/sbin is before /usr/bin, then config is returning invalid path (eg /usr/sbin/apr-1-config//usr/lib64/apr-1/build)
+export PATH="/usr/bin:$PATH"
+
 rm -rf tomcat-native
 mkdir  tomcat-native
 
@@ -11,12 +14,6 @@ else
 fi
 
 ant_version=1.10.7
-function autoauto() {
-  autoupdate 
-  autoreconf --install
-  autoupdate
-  autoconf
-}
 
 pushd  tomcat-native
   sudo $III install -y apr apr-devel  || true # usally not preinstalled
@@ -51,9 +48,7 @@ pushd  tomcat-native
     D="-Dbase.path=`pwd` -Dbase-maven.loc=https://repo.maven.apache.org/maven2"
     $ANT_HOME/bin/ant $D
     pushd native
-      autoauto
-      sh buildconf --with-apr=`readlink -f ../../$APR`
-      autoauto
+      sh buildconf --with-apr="../../$APR"
       ./configure
       make 
     popd

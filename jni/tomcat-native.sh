@@ -11,6 +11,12 @@ else
 fi
 
 ant_version=1.10.7
+function autoauto() {
+  autoupdate 
+  autoreconf --install
+  autoupdate
+  autoconf
+}
 
 pushd  tomcat-native
   sudo $III install -y apr apr-devel  || true # usally not preinstalled
@@ -45,7 +51,9 @@ pushd  tomcat-native
     D="-Dbase.path=`pwd` -Dbase-maven.loc=https://repo.maven.apache.org/maven2"
     $ANT_HOME/bin/ant $D
     pushd native
-      sh buildconf --with-apr=../../$APR
+      autoauto
+      sh buildconf --with-apr=`readlink -f ../../$APR`
+      autoauto
       ./configure
       make 
     popd

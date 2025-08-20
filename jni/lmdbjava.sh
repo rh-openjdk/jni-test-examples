@@ -14,7 +14,7 @@ fi
 
 setZig() {
   local larch=`uname -m`
-  if [ "x$larch" == "ppc64le" ] ; then
+  if [ "x$larch" == "xppc64le" ] ; then
     larch=powerpc64le
   fi
   local ldir=zig-"$larch"-linux-0.15.0-dev.1380+e98aeeb73

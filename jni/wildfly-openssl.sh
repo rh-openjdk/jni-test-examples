@@ -5,6 +5,10 @@ if [ "0$JDK_MAJOR" -eq 8   ]; then
   echo "!skipped!  older wildfly needed for jdk8"
   exit
 fi
+if [ "x$OS_NAME" == "xrhel" -a "0$OS_VERSION_MAJOR" -le "7" ]; then
+  echo "!skipped!  rhel7 and older are to old "
+  exit
+fi
 
 MVOPTS="--batch-mode"
 if [ "x$EX_MVN" == "x" ] ; then

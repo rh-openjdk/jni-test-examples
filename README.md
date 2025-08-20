@@ -45,10 +45,11 @@ lmdbjava for jdk21 and up needs `zig`.
 
 # On top of that:
 ## el9 and up
-Excluded wildfly8-openssl
+ * Excluded wildfly8-openssl
 
 ## el7
-Excluded jnr-posix SpawnTest.inputFile 
+ * Excluded jnr-posix SpawnTest.inputFile 
+ * Excluded wildfly-openssl and lmdbjava
 
 ## ppc64le
 Excluded jnr-posix LinuxPOSIXTest.testMessageHdrMultipleControl

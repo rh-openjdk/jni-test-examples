@@ -1,4 +1,10 @@
 set -exo pipefail
+
+if [ "x$OS_NAME" == "xrhel" -a "0$OS_VERSION_MAJOR" -le "7" ]; then
+  echo "!skipped!  rhel7 and older are to old "
+  exit
+fi
+
 MVOPTS="--batch-mode"
 if [ "x$EX_MVN" == "x" ] ; then
  EX_MVN=mvn
@@ -6,11 +12,7 @@ fi
 
 rm -rf lmdbjava
 
-if [ "x$OTOOL_OS_NAME" = "xel" -a "x$OTOOL_OS_VERSION" = "x7" ] ; then
-  MVN="scl enable rh-maven36 -- mvn $MVOPTS"
-else
-  MVN="$EX_MVN $MVOPTS"
-fi
+MVN="$EX_MVN $MVOPTS"
 
 setZig() {
   local larch=`uname -m`

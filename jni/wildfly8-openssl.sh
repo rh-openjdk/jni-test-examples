@@ -7,12 +7,16 @@ if [ "0$JDK_MAJOR" -gt 8   ]; then
 fi
 
 if [ "x$OS_NAME" == "xfedora" -a   "0$OS_VERSION_MAJOR" -ge 41  ]; then
-  echo "!skipped! klnown to fail on newer fedoras"
+  echo "!skipped! known to fail on newer fedoras"
+  exit
+fi
+if [ "x$OS_NAME" == "xubuntu" -a   "0$OS_VERSION_MAJOR" -ge 24  ]; then
+  echo "!skipped! known to fail on newer ubuntu"
   exit
 fi
 
-if [ "x$OS_NAME" == "xubuntu" -a   "0$OS_VERSION_MAJOR" -ge 24  ]; then
-  echo "!skipped! klnown to fail on newer ubuntu"
+if [ "x$OS_NAME" == "xrhel" -a   "0$OS_VERSION_MAJOR" -ge 9  ]; then
+  echo "!skipped! known to fail on newer rhels"
   exit
 fi
 

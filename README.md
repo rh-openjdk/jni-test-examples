@@ -44,6 +44,9 @@ lmdbjava for jdk21 and up needs `zig`.
    -> s!skipped! klnown to fail on newer ubuntu/fedora
 
 # On top of that:
+## el9 and up
+Excluded wildfly8-openssl
+
 ## el7
 Excluded jnr-posix SpawnTest.inputFile 
 

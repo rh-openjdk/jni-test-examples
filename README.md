@@ -10,23 +10,23 @@ Such variables may multiply.
 # deps
 lmdbjava for jdk21 and up needs `zig`. 
 
-# Fedora 41/ubuntu 24 x86_64/aarch64/ppc64/s390
-| suite/jdk              | jdk8          | jdk11         | jdk17         | jdk21         | jdk25         |
-| -----------------------| ------------- | ------------- | ------------- | ------------- | ------------- |
-|jnr-a64asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-constants           | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-enxio               |   s[2]        | ok///         | ok///         |  s[1]         |  s[1]         |
-|jnr-ffi                 | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-jffi                | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-posix               | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-process             | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-unixsocket          | ok///         | ok///         | ok///         | ok///         | ok///         |
-|jnr-x86asm              | ok///         | ok///         | ok///         | ok///         | ok///         |
-|lmdbjava                | ok[3]///      | ok[3]///      | ok///         | ok///         | ok///         |
-|scala_partest_natives   | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      | ok[3]///      |
-|tomcat-native           | ok////        | ok///         | ok///         | ok///         | ok///         |
-|wildfly-openssl         |   s[4]        | ok///         | ok///         | ok///         | ok///         |
-|wildfly8-openssl        |   s[6]        |   s[5]        |   s[5]        |   s[5]        |   s[5]        |
+# Fedora 41/ubuntu 24 x86_64
+| suite/jdk              | jdk8       | jdk11      | jdk17      | jdk21      | jdk25      |
+| -----------------------| ---------- |----------- | -----------| ---------- | ---------- |
+|jnr-a64asm              | ok         | ok         | ok         | ok         | ok         |
+|jnr-constants           | ok         | ok         | ok         | ok         | ok         |
+|jnr-enxio               | s[2]       | ok         | ok         | s[1]       |  s[1]      |
+|jnr-ffi                 | ok         | ok         | ok         | ok         | ok         |
+|jnr-jffi                | ok         | ok         | ok         | ok         | ok         |
+|jnr-posix               | ok         | ok         | ok         | ok         | ok         |
+|jnr-process             | ok         | ok         | ok         | ok         | ok         |
+|jnr-unixsocket          | ok         | ok         | ok         | ok         | ok         |
+|jnr-x86asm              | ok         | ok         | ok         | ok         | ok         |
+|lmdbjava                | ok[3]      | ok[3]      | ok         | ok         | ok         |
+|scala_partest_natives   | ok[3]      | ok[3]      | ok[3]      | ok[3]      | ok[3]      |
+|tomcat-native           | ok         | ok         | ok         | ok         | ok         |
+|wildfly-openssl         | s[4]       | ok         | ok         | ok         | ok         |
+|wildfly8-openssl        | s[6]       | s[5]       | s[5]       | s[5]       | s[5]       |
 
 [1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...</br>
 	   -> todo fix in upstream
@@ -43,10 +43,11 @@ lmdbjava for jdk21 and up needs `zig`.
 [6] this test currently fails everywhere - the goal is to investigate if there is any environemnt where it can pass</br>
    -> s!skipped! klnown to fail on newer ubuntu/fedora
 
-# el7
+# On top of that:
+## el7
 Excluded jnr-posix SpawnTest.inputFile 
 
-# ppc64le
+## ppc64le
 Excluded jnr-posix LinuxPOSIXTest.testMessageHdrMultipleControl
  * https://github.com/jnr/jnr-posix/issues/178
 

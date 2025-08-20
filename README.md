@@ -43,5 +43,12 @@ lmdbjava for jdk21 and up needs `zig`.
 [6] this test currently fails everywhere - the goal is to investigate if there is any environemnt where it can pass</br>
    -> s!skipped! klnown to fail on newer ubuntu/fedora
 
+# el7
+Excluded jnr-posix SpawnTest.inputFile 
+
+# ppc64le
+Excluded jnr-posix LinuxPOSIXTest.testMessageHdrMultipleControl
+ * https://github.com/jnr/jnr-posix/issues/178
+
 # window x86_64/aarch64
 Unluckily I do not have windows arround

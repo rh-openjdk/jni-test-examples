@@ -25,7 +25,7 @@ for x in $JNR_LIVE_PROJECTS ; do
     sed "s;<source>.*;<source>$JDK_MAJOR</source>;" -i pom.xml
     sed "s;<target>.*;<target>$JDK_MAJOR</target>;" -i pom.xml
     if [ "x$PURGE_MVN" == "xtrue" ] ; then  $EX_MVN $MVOPTS dependency:purge-local-repository -DreResolve=false ; fi
-    $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean install
+    $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean test
   popd
 done
 

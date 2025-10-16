@@ -22,9 +22,16 @@ if [ "0$JDK_MAJOR" -eq 8   ]; then
 fi
 JNR_LIVE_PROJECTS="jnr-enxio:0.32.18"
 patch=true
+srct=false
 if [ "0$JDK_MAJOR" -eq 17 ] ; then
   JNR_LIVE_PROJECTS="jnr-enxio:0.32.6"
   patch="true"
+  if [ "0$OS_VERSION_MAJOR" -le 7 ] ; then
+    JNR_LIVE_PROJECTS="jnr-enxio:0.24"
+    patch="false"
+    srct="true"
+    export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS --add-opens=java.base/java.io=ALL-UNNAMED"
+  fi
 elif [ "0$JDK_MAJOR" -eq 11 ] ; then
   JNR_LIVE_PROJECTS="jnr-enxio:0.24"
   patch="false"
@@ -62,8 +69,10 @@ patch -p0 << EOF
          <artifactId>maven-bundle-plugin</artifactId>
 EOF
     fi
-#    sed "s;<maven.compiler.source>.*;<maven.compiler.source>$JDK_MAJOR</maven.compiler.source>;" -i pom.xml
-#    sed "s;<maven.compiler.target>.*;<maven.compiler.target>$JDK_MAJOR</maven.compiler.target>;" -i pom.xml
+    if [ "x$srct" = "xtrue" ] ; then
+      sed "s;<maven.compiler.source>.*;<maven.compiler.source>$JDK_MAJOR</maven.compiler.source>;" -i pom.xml
+      sed "s;<maven.compiler.target>.*;<maven.compiler.target>$JDK_MAJOR</maven.compiler.target>;" -i pom.xml
+    fi
     $EX_MVN $MVOPTS -Dmaven.javadoc.skip=true clean install
   popd
 done

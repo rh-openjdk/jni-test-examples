@@ -19,10 +19,11 @@ setZig() {
   if [ "x$larch" == "xppc64le" ] ; then
     larch=powerpc64le
   fi
-  local ldir=zig-"$larch"-linux-0.15.0-dev.1380+e98aeeb73
+  local ver=0.15.2
+  local ldir=zig-"$larch"-linux-$ver
   echo "Setting zig from cmdline: $ldir"
   local lname="$ldir.tar.xz"
-  curl -k -f -L -O "https://ziglang.org/builds/$lname"
+  curl -k -f -L -O "https://ziglang.org/download/$ver/$lname"
   tar -xf $lname
   export PATH="`pwd`/$ldir:$PATH"
 }

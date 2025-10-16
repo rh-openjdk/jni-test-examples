@@ -20,6 +20,7 @@ jobs:
           - JDK 11
           - JDK 17
           - JDK 21
+          - JDK 25
         include:
           - jdkconf: JDK 8
             jdkver: "8"

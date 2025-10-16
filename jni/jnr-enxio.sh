@@ -14,8 +14,7 @@ mkdir  $sub
 pushd  $sub
 
 if [ "0$JDK_MAJOR" -ge 21   ]; then
-  echo "!skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi..."
-  exit
+ export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS --add-opens=java.base/sun.nio.ch=ALL-UNNAMED"
 fi
 if [ "0$JDK_MAJOR" -eq 8   ]; then
   echo "!skipped!  java.lang.NoSuchMethodError: java.nio.ByteBuffer.flip()Ljava/nio/ByteBuffer;"

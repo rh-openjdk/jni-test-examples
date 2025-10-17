@@ -15,7 +15,7 @@ lmdbjava for jdk21 and up needs `zig`.
 | -----------------------| ---------- |----------- | -----------| ---------- | ---------- |
 |jnr-a64asm              | ok         | ok         | ok         | ok         | ok         |
 |jnr-constants           | ok         | ok         | ok         | ok         | ok         |
-|jnr-enxio               | s[2]       | ok         | ok         | s[1]       |  s[1]      |
+|jnr-enxio               | s[2]       | ok         | ok         | ok[1]      | ok[1]      |
 |jnr-ffi                 | ok         | ok         | ok         | ok         | ok         |
 |jnr-jffi                | ok         | ok         | ok         | ok         | ok         |
 |jnr-posix               | ok         | ok         | ok         | ok         | ok         |
@@ -28,8 +28,8 @@ lmdbjava for jdk21 and up needs `zig`.
 |wildfly-openssl         | s[4]       | ok         | ok         | ok         | ok         |
 |wildfly8-openssl        | s[6]       | s[5]       | s[5]       | s[5]       | s[5]       |
 
-[1] !skipped!  NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...</br>
-	   -> todo fix in upstream
+[1] --add-opens to fix NativeTest.setBlocking:35 » InaccessibleObject Unable to make field private fi...</br>
+	   -> todo fix in upstream. Similar issue also for 17 on el7
 
 [2] !skipped!  java.lang.NoSuchMethodError: java.nio.ByteBuffer.flip()Ljava/nio/ByteBuffer;</br>
    -> no longer fixable

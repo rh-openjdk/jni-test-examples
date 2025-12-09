@@ -4,12 +4,12 @@ rm -rf $sub
 mkdir $sub
 pushd $sub
   sbtv=1.11.4
-  scalav=2.13.16
+  scalav=2.13.18
   wget https://github.com/sbt/sbt/releases/download/v$sbtv/sbt-$sbtv.tgz
   tar -xf sbt-$sbtv.tgz
-  git clone https://github.com/judovana/scala.git scala-$scalav
+  wget -O scala-$scalav.tar.gz https://github.com/scala/scala/archive/refs/tags/v$scalav.tar.gz
+  tar -xf scala-$scalav.tar.gz
   pushd scala-$scalav
-    git checkout jdk11AndUpNatives
     mach_file=./test/files/jvm/natives.check
     if $JAVA_HOME/bin/java -version 2>&1 | grep Picked ; then
       orig_mach_file_content=`cat ./test/files/jvm/natives.check`

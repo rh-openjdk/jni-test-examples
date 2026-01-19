@@ -10,8 +10,12 @@ readonly SCRIPT_DIR="$( cd -P "$( dirname "$SCRIPT_SOURCE" )" && pwd )"
 
 set -exo pipefail
 
-if [ "0$JDK_MAJOR" -lt 21   ]; then
-  echo "!skipped!  older wildfly needed for jdk21 and up"
+if [ "0$JDK_MAJOR" -lt 11   ]; then
+  echo "!skipped!  older wildfly needed for jdk8"
+  exit
+fi
+if [ "0$JDK_MAJOR" -ge 21   ]; then
+  echo "!skipped!  newer wildfly needed for jdk21"
   exit
 fi
 if [ "x$OS_NAME" == "xrhel" -a "0$OS_VERSION_MAJOR" -le "7" ]; then
@@ -20,7 +24,8 @@ if [ "x$OS_NAME" == "xrhel" -a "0$OS_VERSION_MAJOR" -le "7" ]; then
 fi
 
 
-export NATIVES_VERSION=2.3.0.Alpha3
-export VERSION=2.3.0.Alpha2
+export NATIVES_VERSION=2.2.2.Final
+export VERSION=2.2.5.Final
 bash "$SCRIPT_DIR/wildfly-openssl.bash"
+
 

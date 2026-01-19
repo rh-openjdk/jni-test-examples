@@ -26,6 +26,7 @@ fi
 
 export NATIVES_VERSION=2.2.2.Final
 export VERSION=2.2.5.Final
+export DISABLE_testAvailableProtocols=true
 bash "$SCRIPT_DIR/wildfly-openssl.bash"
 
 

@@ -78,6 +78,10 @@ pushd  wildfly-openssl
     # tls 1.3
       ignoreMethod  "public void testAvailableProtocolsWithTLS13CipherSuites"  "SslCiphersTest"
     fi
+    if [  "$DISABLE_testAvailableProtocols" = "true"  ] ; then
+    # tls 1.3
+      ignoreMethod  "public void testAvailableProtocols"  "SslCiphersTest"
+    fi
     if [ $ignoredTests -gt 0 ] ; then
       $GIT  commit . -m "disbaled $ignoredTests tests"
     else

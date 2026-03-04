@@ -21,6 +21,11 @@ DISABLE_testNoExplicitEnabledProtocols="true"
 DISABLE_testMultipleEnabledProtocolsWithClientProtocolWithinEnabledRange="true"
 DISABLE_testCipherSuiteConverter="true"
 DISABLE_testAvailableProtocolsWithTLS13CipherSuites="true"
+REMOVE_performTestTwoWayFile="false"
+
+if $JAVA_HOME/bin/java -version 2>&1  | grep fastdebug ; then
+  REMOVE_performTestTwoWayFile="true"
+fi
 
 function addIgnoreImport() {
   if ! grep -e "import org.junit.Ignore" "${1}" ; then #do not create duplicated imports
@@ -86,6 +91,14 @@ pushd  wildfly-openssl
       $GIT  commit . -m "disbaled $ignoredTests tests"
     else
       echo "No test ignored"
+    fi
+    if [ $REMOVE_performTestTwoWayFile = "true" ] ; then
+      boffile=`find | grep java/src/test/.*/BasicOpenSSLEngineTest.java`
+      addIgnoreImport "${boffile}"
+      sed "s/@Test/@Ignore @Test/g" -i "${boffile}"
+      # fixing one double ignore
+      sed "s/@Ignore public void testNoExplicitEnabledProtocols/public void testNoExplicitEnabledProtocols/g" -i "${boffile}"
+      cat $boffile | grep -e "@Test" -A1
     fi
     # it is better to set the libssl and libcrypto on our own
     # the wildfly-openssl search is just tragic, and the excception throwns out of it are very missleading

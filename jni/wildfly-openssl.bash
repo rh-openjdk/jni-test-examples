@@ -56,7 +56,7 @@ pushd  wildfly-openssl
   tar -xf ${NATIVES_VERSION}.tar.gz
   pushd wildfly-openssl-natives-${NATIVES_VERSION}
     $EX_MVN $MVOPTS clean install -Dnative-build
-    $EX_MVN $MVOPTS clean install
+    $EX_MVN $MVOPTS install
   popd
   wget https://github.com/wildfly-security/wildfly-openssl/archive/refs/tags/${VERSION}.tar.gz
   tar -xf ${VERSION}.tar.gz

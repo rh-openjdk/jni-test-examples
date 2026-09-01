@@ -73,13 +73,23 @@ else
   fi
   pushd lmdbjava
     git checkout lmdbjava-0.9.1
-    bash cross-compile.sh
-    if [ "0$JDK_MAJOR" -ge 25 ] ; then
-      ## jacoco prints a lot of errors,but it seesm to passe same 222 tests as with jdk21
-      $MVN clean install -Dfmt.skip
-    else
-      $MVN clean install
+    extraMvnArgs=""
+    if [ "x$( uname -m )" = "xppc64le" ] ; then
+        # add ppc64le target to cross-compile.sh
+        sed -i 's/aarch64-linux-gnu/powerpc64le-linux-gnu &/g' cross-compile.sh
+        extraMvnArgs="${extraMvnArgs} -Dlmdbjava.embedded.lib=org/lmdbjava/powerpc64le-linux-gnu.so"
     fi
+    bash cross-compile.sh
+    if type getconf && [ "$(getconf PAGESIZE)" -gt 4096 ] ; then
+        # to avoid following exception on system with 64k pages:
+        # org.lmdbjava.Env$MapFullException: Environment mapsize reached (-30792)
+        sed -i 's/.setMapSize(KIBIBYTES.toBytes(256))/.setMapSize(KIBIBYTES.toBytes(512))/g' src/test/java/org/lmdbjava/{TxnTest,CursorIterableTest}.java
+    fi
+    if [ "0$JDK_MAJOR" -ge 25 ] ; then
+      ## jacoco prints a lot of errors, but it seems to pass same 222 tests as with jdk21
+      extraMvnArgs="${extraMvnArgs} -Dfmt.skip"
+    fi
+    $MVN clean install ${extraMvnArgs}
   popd
 fi
 popd

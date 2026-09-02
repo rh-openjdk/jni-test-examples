@@ -27,7 +27,7 @@ pushd  tomcat-native
   if [ ! -e $ANT ] ; then
     ant_version=1.10.15
     ANT=apache-ant-$ant_version-bin.tar.xz
-    wget --no-check-certificate https://mirror.hosting90.cz/apache/ant/binaries/$ANT
+    wget --no-check-certificate https://archive.apache.org/dist/ant/binaries/$ANT
   fi
   tar -xf $ANT
   export ANT_HOME="`pwd`/apache-ant-$ant_version/"

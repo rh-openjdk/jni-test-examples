@@ -45,7 +45,7 @@ pushd  tomcat-native
   wget --no-check-certificate https://github.com/apache/tomcat-native/archive/$tomcat_native
   tar -xf $tomcat_native
   pushd tomcat-native-${tomcat_native_version}
-    D="-Dbase.path=`pwd` -Dbase-maven.loc=https://repo.maven.apache.org/maven2"
+    D="-Dbase.path=`pwd` -Dbase-maven.loc=https://maven-central.storage-download.googleapis.com/maven2"
     $ANT_HOME/bin/ant $D
     pushd native
       sh buildconf --with-apr="../../$APR"

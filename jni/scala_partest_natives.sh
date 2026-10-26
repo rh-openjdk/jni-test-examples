@@ -17,12 +17,17 @@ pushd $sub
       echo $orig_mach_file_content >> $mach_file
       cat ./test/files/jvm/natives.check
     fi
-    ../sbt/bin/sbt --java-home $JAVA_HOME --no-colors "partest --debug  test/files/jvm/natives.scala" || echo "generated classes should be ok even in case of (most likely) failure" 
+    tee repos.conf << EOF
+[repositories]
+local
+google-maven-central: https://maven-central.storage-download.googleapis.com/maven2/
+EOF
+    ../sbt/bin/sbt --java-home $JAVA_HOME --no-colors -Dsbt.repository.config="$PWD"/repos.conf -Dsbt.override.build.repos=true "partest --debug  test/files/jvm/natives.scala" || echo "generated classes should be ok even in case of (most likely) failure"
     pushd test/files/jvm
         rm -v  libnatives*.so
         OSTYPE=linux  sh -x  mkLibNatives.sh 
     popd
-    scala_test_nativelib="natives" ../sbt/bin/sbt --java-home $JAVA_HOME --no-colors "partest test/files/jvm/natives.scala" # now real test against freshly built library
+    scala_test_nativelib="natives" ../sbt/bin/sbt --java-home $JAVA_HOME --no-colors -Dsbt.repository.config="$PWD"/repos.conf -Dsbt.override.build.repos=true "partest test/files/jvm/natives.scala" # now real test against freshly built library
   popd
 popd
 
